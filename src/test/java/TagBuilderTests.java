@@ -1,8 +1,8 @@
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import sdm.shop.TagBuilder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TagBuilderTests {
 
@@ -68,5 +68,43 @@ public class TagBuilderTests {
         builder.addSibling("flavor2");
         builder.addChild("requirements");
         assertEquals(expectedXml, builder.toXml());
+    }
+
+    @Test
+    void buildRepeatingChildrenAndGrandchildren() {
+        String expectedXml =
+            "<flavors>" +
+                "<flavor>" +
+                    "<requirements>" +
+                        "<requirement/>" +
+                    "</requirements>" +
+                "</flavor>" +
+                "<flavor>" +
+                    "<requirements>" +
+                        "<requirement/>" +
+                    "</requirements>" +
+                "</flavor>" +
+            "</flavors>";
+        TagBuilder builder = new TagBuilder("flavors");
+        for (int i = 0; i < 2; i++) {
+            builder.addToParent("flavors", "flavor");
+            builder.addChild("requirements");
+            builder.addChild("requirement");
+        }
+        assertEquals(expectedXml, builder.toXml());
+    }
+
+    @Test
+    void parentNameNotFound() {
+        TagBuilder builder = new TagBuilder("flavors");
+        RuntimeException runtimeException = assertThrows(RuntimeException.class,
+                () -> {
+                    for (int i = 0; i < 2; i++) {
+                        builder.addToParent("favors", "flavor");
+                        builder.addChild("requirements");
+                        builder.addChild("requirement");
+                    }
+                });
+        assertEquals("missing parent tag: favors", runtimeException.getMessage());
     }
 }
