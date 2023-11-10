@@ -34,6 +34,14 @@ public class TagBuilder {
         parentNode.add(currentNode);
     }
 
+    public void addAttribute(String attribute, String value) {
+        currentNode.addAttribute(attribute, value);
+    }
+
+    public void addValue(String value) {
+        currentNode.addValue(value);
+    }
+
     private TagNode findParentBy(String parentName) {
         TagNode parentNode = currentNode;
         while (parentNode != null) {

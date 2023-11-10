@@ -107,4 +107,29 @@ public class TagBuilderTests {
                 });
         assertEquals("missing parent tag: favors", runtimeException.getMessage());
     }
+
+    @Test
+    void buildAttributesAndValues() {
+        String expectedXml =
+                "<flavor name='Test-Driven Development'>" +
+                    "<requirements>" +
+                        "<requirement type='hardware'>" +
+                            "1 computer for every 2 participants" +
+                        "</requirement>" +
+                        "<requirement type='software'>" +
+                            "IDE" +
+                        "</requirement>" +
+                    "</requirements>" +
+                "</flavor>";
+        TagBuilder builder = new TagBuilder("flavor");
+        builder.addAttribute("name", "Test-Driven Development");
+        builder.addChild("requirements");
+        builder.addChild("requirement");
+        builder.addAttribute("type", "hardware");
+        builder.addValue("1 computer for every 2 participants");
+        builder.addToParent("requirements", "requirement");
+        builder.addAttribute("type", "software");
+        builder.addValue("IDE");
+        assertEquals(expectedXml, builder.toXml());
+    }
 }
