@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import sdm.shop.TagBuilder;
 
@@ -37,6 +38,35 @@ public class TagBuilderTests {
         builder.addChild("flavor");
         builder.addChild("requirements");
         builder.addChild("requirement");
+        assertEquals(expectedXml, builder.toXml());
+    }
+
+    @Test
+    void buildSibling() {
+        String expectedXml =
+                "<flavors>" +
+                    "<flavor1/>" +
+                    "<flavor2/>" +
+                "</flavors>";
+        TagBuilder builder = new TagBuilder("flavors");
+        builder.addChild("flavor1");
+        builder.addSibling("flavor2");
+        assertEquals(expectedXml, builder.toXml());
+    }
+
+    @Test
+    void buildChildrenOfSibling() {
+        String expectedXml =
+                "<flavors>" +
+                        "<flavor1/>" +
+                        "<flavor2>" +
+                            "<requirements/>" +
+                        "</flavor2>" +
+                "</flavors>";
+        TagBuilder builder = new TagBuilder("flavors");
+        builder.addChild("flavor1");
+        builder.addSibling("flavor2");
+        builder.addChild("requirements");
         assertEquals(expectedXml, builder.toXml());
     }
 }

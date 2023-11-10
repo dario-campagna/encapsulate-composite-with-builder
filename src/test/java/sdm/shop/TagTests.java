@@ -2,7 +2,7 @@ package sdm.shop;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TagTests {
 
@@ -76,5 +76,22 @@ public class TagTests {
                 "</orders>";
 
         assertEquals(expected, ordersTag.toString());
+    }
+
+    @Test
+    void rootNodeHasNoParent() {
+        TagNode root = new TagNode("root");
+        assertNull(root.getParent());
+    }
+
+    @Test
+    void childNodeHasAParent() {
+        TagNode root = new TagNode("root");
+        TagNode childNode = new TagNode("child");
+        root.add(childNode);
+        assertAll(
+                () -> assertEquals(root, childNode.getParent()),
+                () -> assertEquals("root", childNode.getParent().getName())
+        );
     }
 }

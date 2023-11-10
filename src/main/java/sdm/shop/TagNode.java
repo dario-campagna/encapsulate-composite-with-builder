@@ -8,6 +8,7 @@ public class TagNode {
     private String value = "";
     private final StringBuilder attributes;
     private List<TagNode> children;
+    private TagNode parent;
 
     public TagNode(String name) {
         this.name = name;
@@ -28,7 +29,16 @@ public class TagNode {
     }
 
     public void add(TagNode node) {
+        node.parent = this;
         children.add(node);
+    }
+
+    public TagNode getParent() {
+        return parent;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
